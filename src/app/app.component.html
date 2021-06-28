@@ -1,0 +1,127 @@
+<div class="container my-5">
+  <form (ngSubmit)="onSubmit()" [formGroup]="formCredito" #formDirective="ngForm">
+    <div class="row justify-content-center">
+      <div class="card col-10">
+        <div class="card-body row ">
+          <h2 class="card-title">Agregar Credito</h2>
+          <div class="col-4">
+            <mat-form-field class="example-full-width" >
+              <mat-label>Monto ($)</mat-label>
+              <input currencyMask matInput placeholder="Máximo 50.000$" formControlName="monto" 
+              (keypress)="($event.charCode >= 48 && $event.charCode < 58)">
+            </mat-form-field> 
+            <p class="text-danger" *ngIf="formCredito.get('monto').hasError('required') &&
+             formCredito.get('monto').touched">
+            Este campo es obligatorio.
+            </p>
+            <p class="text-danger" *ngIf="formCredito.get('monto').hasError('max') || 
+            formCredito.get('monto').hasError('min') &&
+            formCredito.get('monto').touched">
+           Este campo solo admite valores entre $ 1 y $ 50.000
+           </p>
+          </div>
+          <div class="col-3">
+            <mat-form-field class="example-full-width" >
+              <mat-label>Puntuación Cliente</mat-label>
+              <mat-select formControlName="puntuacionCliente">
+                <mat-option *ngFor="let cliente of tiposCliente" [value]="cliente.value">
+                  {{cliente.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <p class="text-danger" *ngIf="formCredito.get('puntuacionCliente').hasError('required') &&
+            formCredito.get('puntuacionCliente').touched">
+           Este campo es obligatorio.
+           </p>
+          </div>
+          <div class="col-3">
+            <mat-form-field class="example-full-width" >
+              <mat-label>AI</mat-label>
+              <mat-select formControlName="puntuacionAi">
+                <mat-option *ngFor="let punto of puntuacionNum" [value]="punto">
+                  {{punto}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <p class="text-danger" *ngIf="formCredito.get('puntuacionAi').hasError('required') &&
+            formCredito.get('puntuacionAi').touched">
+           Este campo es obligatorio.
+           </p>
+          </div>
+          <div class="col-2">
+            <button type="submit" [disabled]="formCredito.invalid" class="btn btn-success btn-md btn-block" >
+              Agregar
+            </button>
+          </div>
+        </div>
+      </div>
+     
+      
+    </div>
+    </form> 
+
+    <div class="row justify-content-center my-5" *ngIf="lista.length">
+      <table mat-table [dataSource]="lista" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> ID. </th>
+          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+      
+ 
+        <ng-container matColumnDef="deuda">
+          <th mat-header-cell *matHeaderCellDef> Monto</th>
+          <td mat-cell *matCellDef="let element"> {{element.deuda}} </td>
+        </ng-container>
+      
+
+        <ng-container matColumnDef="id_puntuacion">
+          <th mat-header-cell *matHeaderCellDef class="width-200"> Puntuacion Cliente </th>
+          <td mat-cell *matCellDef="let element"> {{element.id_puntuacion}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="fecha">
+          <th mat-header-cell *matHeaderCellDef class="width-200"> fecha </th>
+          <td mat-cell *matCellDef="let element"> {{element.fecha}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="AlgoritoIa">
+          <th mat-header-cell *matHeaderCellDef class="width-200"> Puntuacion AI </th>
+          <td mat-cell *matCellDef="let element"> {{element.AlgoritoIa}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef class="acciones"> Acciones </th>
+          <td mat-cell *matCellDef="let element"> 
+      
+           <button mat-mini-fab class="green mx-2" 
+           matTooltip="Aprobar" matTooltipPosition="left"
+           (click)="aprobar(element.id)">
+            <mat-icon>check</mat-icon>
+          </button>
+          <button  matTooltipPosition="right" mat-mini-fab class="red mx-2" 
+          matTooltip="No aprobar"
+          (click)="noAprobar(element.id)" >
+            <mat-icon>close</mat-icon>
+          </button>
+         
+          </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="eliminar">
+          <th mat-header-cell *matHeaderCellDef > Eliminar </th>
+          <td mat-cell *matCellDef="let element"> 
+           <button mat-mini-fab color="warn"
+           matTooltipPosition="right"
+           matTooltip="Eliminar" (click)="eliminar(element.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+          </td>
+        </ng-container>
+        
+        
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'status': row.status, 'nostatus': row.status === false }"></tr>
+      </table>
+    </div>
+</div>
