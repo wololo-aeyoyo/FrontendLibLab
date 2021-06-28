@@ -1,6 +1,8 @@
 import { Component, OnInit , ViewChild} from '@angular/core';
 import { FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
 import {ServicioHttp} from '../services/http.service'
+import {formatDate} from '@angular/common';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -45,7 +47,7 @@ export class AppComponent {
       'status':false,
       'deuda':this.formCredito.value.monto,
       'AlgoritoIa':this.formCredito.value.puntuacionAi,
-      'fecha':'2020-06-27',
+      'fecha':formatDate(new Date(), 'yyyy-MM-dd', 'en'),
       'id_user':2,
       'id_puntuacion':pCliente(this.formCredito.value.puntuacionCliente)
     }
